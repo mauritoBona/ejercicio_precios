@@ -36,7 +36,7 @@ public class PriceControllerTest {
     // Rate: 10.00 - Price: 35.00 - Currency: EUR
     @Test
     public void test1_Request_10Am_Day_14_ForProduct_35455_AndBrand_1() throws Exception {
-        MvcResult response = mockMvc.perform(get("/price/findActivePrice")
+        MvcResult response = mockMvc.perform(get("/price/findActive")
                 .param("product_id", "35455")
                 .param("brand_id", "1")
                 .param("date", "2020-06-14T10:00:00"))
@@ -59,7 +59,7 @@ public class PriceControllerTest {
     // Rate: 8.00 - Price: 25.45 - Currency: EUR
     @Test
     public void test2_Request_4Pm_Day_14_ForProduct_35455_AndBrand_1() throws Exception {
-        MvcResult response = mockMvc.perform(get("/price/findActivePrice")
+        MvcResult response = mockMvc.perform(get("/price/findActive")
                         .param("product_id", "35455")
                         .param("brand_id", "1")
                         .param("date", "2020-06-14T16:00:00"))
@@ -82,7 +82,7 @@ public class PriceControllerTest {
     // Rate: 8.00 - Price: 25.45 - Currency: EUR
     @Test
     public void test3_Request_9Pm_Day_14_ForProduct_35455_AndBrand_1() throws Exception {
-        MvcResult response = mockMvc.perform(get("/price/findActivePrice")
+        MvcResult response = mockMvc.perform(get("/price/findActive")
                         .param("product_id", "35455")
                         .param("brand_id", "1")
                         .param("date", "2020-06-14T21:00:00"))
@@ -105,7 +105,7 @@ public class PriceControllerTest {
     // Rate: 9.20 - Price: 30.50 - Currency: EUR
     @Test
     public void test4_Request_10Am_Day_15_ForProduct_35455_AndBrand_1() throws Exception {
-        MvcResult response = mockMvc.perform(get("/price/findActivePrice")
+        MvcResult response = mockMvc.perform(get("/price/findActive")
                         .param("product_id", "35455")
                         .param("brand_id", "1")
                         .param("date", "2020-06-15T10:00:00"))
@@ -129,7 +129,7 @@ public class PriceControllerTest {
     // Rate: 10.00 - Price: 38.95 - Currency: EUR
     @Test
     public void test5_Request_10Am_Day_15_ForProduct_35455_AndBrand_1() throws Exception {
-        MvcResult response = mockMvc.perform(get("/price/findActivePrice")
+        MvcResult response = mockMvc.perform(get("/price/findActive")
                         .param("product_id", "35455")
                         .param("brand_id", "1")
                         .param("date", "2020-06-16T21:00:00"))
@@ -145,5 +145,23 @@ public class PriceControllerTest {
                 result.getStartDate());
         Assertions.assertEquals(LocalDateTime.of(2020, 12, 31, 23, 59,59),
                 result.getEndDate());
+    }
+
+
+
+    @Test
+    public void RequestWithoutProductID_BadRequest() throws Exception {
+        mockMvc.perform(get("/price/findActive")
+                        .param("brand_id", "1")
+                        .param("date", "2020-06-16T21:00:00"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void RequestWithoutBrandID_BadRequest() throws Exception {
+        mockMvc.perform(get("/price/findActive")
+                        .param("product_id", "1")
+                        .param("date", "2020-06-16T21:00:00"))
+                .andExpect(status().isBadRequest());
     }
 }

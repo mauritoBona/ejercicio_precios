@@ -1,12 +1,12 @@
 package mauro.bonanno.ejercicio.precios.application.controller;
 
+import mauro.bonanno.ejercicio.precios.application.exceptions.NotFoundException;
 import mauro.bonanno.ejercicio.precios.application.response.ActivePriceDTO;
+import mauro.bonanno.ejercicio.precios.domain.model.Prices;
 import mauro.bonanno.ejercicio.precios.domain.usecase.FindActivePrice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -14,14 +14,30 @@ import java.time.LocalDateTime;
 @RequestMapping("/price")
 public class PriceController {
 
-    @Autowired
     private FindActivePrice findActivePrice;
 
-    @RequestMapping(value="/findActivePrice", method = RequestMethod.GET)
+    @Autowired
+    public PriceController(@Autowired FindActivePrice findActivePrice) {
+        this.findActivePrice = findActivePrice;
+    }
+
+    @GetMapping(value="/findActive", produces = MediaType.APPLICATION_JSON_VALUE)
     public ActivePriceDTO findActivePrice(@RequestParam("product_id") Long productID,
                                           @RequestParam("brand_id") Long brandID,
-                                          @RequestParam("date") LocalDateTime dateRequest) {
+                                          @RequestParam(value = "date", required = false) LocalDateTime dateRequest) throws Exception {
+        if (dateRequest == null) {
+            dateRequest = LocalDateTime.now();
+        }
 
-        return new ActivePriceDTO();
+        Prices activePrice = findActivePrice.execute(productID, brandID, dateRequest);
+
+        if (activePrice == null) {
+            throw new NotFoundException(String.format("Active Price not found by Product ID: %d - Brand ID: %d - Date Request: %s ",
+                    productID, brandID, dateRequest));
+        }
+
+        return new ActivePriceDTO(activePrice.getPriceID().getBrandID(), activePrice.getPriceID().getProductID(),
+                activePrice.getPriceID().getStartDate(), activePrice.getPriceID().getEndDate(),
+                activePrice.getRate(), activePrice.getPrice(), activePrice.getCurrency());
     }
 }

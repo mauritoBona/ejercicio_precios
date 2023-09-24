@@ -34,6 +34,19 @@ public class ActivePriceDTO implements Serializable {
         return brandID;
     }
 
+    public ActivePriceDTO() {
+    }
+
+    public ActivePriceDTO(Long brandID, Long productID, LocalDateTime startDate, LocalDateTime endDate, BigDecimal rate, BigDecimal price, String currency) {
+        this.brandID = brandID;
+        this.productID = productID;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.rate = rate;
+        this.price = price;
+        this.currency = currency;
+    }
+
     public void setBrandID(Long brandID) {
         this.brandID = brandID;
     }
