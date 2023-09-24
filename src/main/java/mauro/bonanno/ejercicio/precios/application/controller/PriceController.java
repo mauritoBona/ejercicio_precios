@@ -36,8 +36,8 @@ public class PriceController {
                     productID, brandID, dateRequest));
         }
 
-        return new ActivePriceDTO(activePrice.getPriceID().getBrandID(), activePrice.getPriceID().getProductID(),
-                activePrice.getPriceID().getStartDate(), activePrice.getPriceID().getEndDate(),
+        return new ActivePriceDTO(activePrice.getId().getBrandID(), activePrice.getId().getProductID(),
+                activePrice.getId().getStartDate(), activePrice.getId().getEndDate(),
                 activePrice.getRate(), activePrice.getPrice(), activePrice.getCurrency());
     }
 }

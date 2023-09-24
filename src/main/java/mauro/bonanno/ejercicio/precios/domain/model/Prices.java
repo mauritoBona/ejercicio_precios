@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Prices {
 
     @EmbeddedId
-    private PricesID priceID;
+    private PricesID id;
 
     @Column(name = "PRICE_LIST", nullable = false)
     private Long priceList;
@@ -30,12 +30,12 @@ public class Prices {
     @Column(name = "CURRENCY", nullable = false)
     private String currency;
 
-    public PricesID getPriceID() {
-        return priceID;
+    public PricesID getId() {
+        return id;
     }
 
-    public void setPriceID(PricesID priceID) {
-        this.priceID = priceID;
+    public void setId(PricesID id) {
+        this.id = id;
     }
 
     public Long getPriceList() {
@@ -87,26 +87,26 @@ public class Prices {
 
         public PricesBuilder() {
             prices = new Prices();
-            prices.setPriceID(new PricesID());
+            prices.setId(new PricesID());
         }
 
         public Prices.PricesBuilder productID(Long productID) {
-            prices.getPriceID().setProductID(productID);
+            prices.getId().setProductID(productID);
             return this;
         }
 
         public Prices.PricesBuilder brandID(Long brandID) {
-            prices.getPriceID().setBrandID(brandID);
+            prices.getId().setBrandID(brandID);
             return this;
         }
 
         public Prices.PricesBuilder startDate(LocalDateTime startDate) {
-            prices.getPriceID().setStartDate(startDate);
+            prices.getId().setStartDate(startDate);
             return this;
         }
 
         public Prices.PricesBuilder endDate(LocalDateTime endDate) {
-            prices.getPriceID().setEndDate(endDate);
+            prices.getId().setEndDate(endDate);
             return this;
         }
 

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static mauro.bonanno.ejercicio.precios.units.Utils.buildPrices;
 import static org.mockito.Mockito.*;
@@ -45,8 +46,8 @@ public class PriceControllerTest {
 
         Assertions.assertEquals(brandID, result.getBrandID());
         Assertions.assertEquals(productID, result.getProductID());
-        Assertions.assertEquals(prices.getPriceID().getStartDate(), result.getStartDate());
-        Assertions.assertEquals(prices.getPriceID().getEndDate(), result.getEndDate());
+        Assertions.assertEquals(prices.getId().getStartDate(), result.getStartDate());
+        Assertions.assertEquals(prices.getId().getEndDate(), result.getEndDate());
         Assertions.assertEquals(prices.getRate(), result.getRate());
         Assertions.assertEquals(prices.getPrice(), result.getPrice());
     }
@@ -60,7 +61,7 @@ public class PriceControllerTest {
 
         when(this.findActivePrice.execute(productID, brandID, requestDate)).thenReturn(null);
 
-        ActivePriceDTO result = this.priceController.findActivePrice(productID, brandID, requestDate);
+        this.priceController.findActivePrice(productID, brandID, requestDate);
     }
 
     @Test
@@ -72,14 +73,15 @@ public class PriceControllerTest {
         Prices prices = buildPrices(1L, 2L, requestDate.minusDays(1), requestDate.plusHours(2),
                 BigDecimal.TEN, BigDecimal.ONE);
 
-        when(this.findActivePrice.execute(eq(productID), eq(brandID), any(LocalDateTime.class))).thenReturn(prices);
+        when(this.findActivePrice.execute(eq(productID), eq(brandID), any(LocalDateTime.class)))
+                .thenReturn(prices);
 
         ActivePriceDTO result = this.priceController.findActivePrice(productID, brandID, null);
 
         Assertions.assertEquals(brandID, result.getBrandID());
         Assertions.assertEquals(productID, result.getProductID());
-        Assertions.assertEquals(prices.getPriceID().getStartDate(), result.getStartDate());
-        Assertions.assertEquals(prices.getPriceID().getEndDate(), result.getEndDate());
+        Assertions.assertEquals(prices.getId().getStartDate(), result.getStartDate());
+        Assertions.assertEquals(prices.getId().getEndDate(), result.getEndDate());
         Assertions.assertEquals(prices.getRate(), result.getRate());
         Assertions.assertEquals(prices.getPrice(), result.getPrice());
     }

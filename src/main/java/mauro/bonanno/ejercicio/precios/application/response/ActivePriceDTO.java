@@ -1,7 +1,6 @@
 package mauro.bonanno.ejercicio.precios.application.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

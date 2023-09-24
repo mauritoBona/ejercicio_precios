@@ -9,6 +9,9 @@ public class ErrorDTO implements Serializable {
     @JsonProperty("error")
     private String error;
 
+    public ErrorDTO() {
+    }
+
     public ErrorDTO(String error) {
         this.error = error;
     }
