@@ -42,10 +42,10 @@ Se utiliza un H2 que se carga al levantar la aplicación, se puede acceder desde
 ## Solución
 La tabla se creó con la PK de PRODUCT_ID - BRAND_ID - START_DATE - END_DATE - PRIORITY dado que se entiende que no se puede cargar un mismo
 producto para la misma marca en donde las fechas sean iguales e igual prioridad, dado que se espera obtener un solo resultado
-porque se entiende que solo puede haber un precio Activado (el de mayor prioridad). También se agregan 2 índices que pueden
+dado que se entiende que solo puede haber un precio activado (el de mayor prioridad). También se agregan 2 índices que pueden
 ser útiles en un futuro, el buscar solo por BRAND_ID o PRODUCT_ID.
 
-Luego para obtener el resultado válido se hace desde la siguiente Query:
+Luego, para obtener el resultado válido se hace desde la siguiente Query:
 
     SELECT * FROM PRICES WHERE PRODUCT_ID = :product_id AND BRAND_ID = :brand_id AND START_DATE <= :date AND END_DATE > :date ORDER BY PRIORITY LIMIT 1;
 
@@ -74,7 +74,32 @@ se podía levantar y luego acceder a h2 para ver las tablas y su información.
 2. Se creó otro Branch en el cual se desarrolló la lógica, para esto primero se crearon los tests funcionales y las firmas del controlador y el 
 caso de uso que se iba a utilizar y se subieron estos cambios.
 3. Para luego realizar la lógica del Controller, el servicio y la interfaz del JPA con sus tests.
-4. Una vez que pasaron todos los tests, validé que la cobertura de tests este en los archivos creados al 100% además de probarlo de forma local. 
+4. Una vez que pasaron todos los tests, validé que la cobertura de tests esté en los archivos creados al 100% además de probarlo de forma local. 
+
+## Api:
+El llamado a la api es con la siguiente curl:
+    
+    curl --location --request GET 'http://localhost:8080/price/findActive?product_id=35455&brand_id=1&date=2020-06-14T21:00:00'
+
+Se obtiene como resultado:
+
+    {
+        "brand_id": 1,
+        "product_id": 35455,
+        "start_date": "2020-06-14T00:00:00",
+        "end_date": "2020-12-31T23:59:59",
+        "rate": 10.00,
+        "price": 35.00,
+        "currency": "EUR"
+    }
+
+![resultado](documentation/resultado.png)
+
+![sin_resultado](documentation/sin_resultado.png)
+
+![sin_product_id](documentation/sin_produncto.png)
+
+![sin_brand_id](documentation/sin_brand.png)
 
 ## Mejoras
     *   Se puede cambiar el formato de json que se retorno, seteando el Price como otro DTO que sea PRICE y adentro el monto y moneda, para identifijar de forma 
@@ -84,3 +109,4 @@ caso de uso que se iba a utilizar y se subieron estos cambios.
     *   Agregar perfiles a la aplicación para poder tener a su vez una mejor separación en el caso de que se necesite utilizar otro tipo de base de datos,
     para esto la idea seria agregar un tercer package al nivel de domain y application que sea architecture y ahí agregar lo que es configuración
     por perfil y base de datos.
+    * Agregar swagger para la documentación de la API. Esto no pude hacerlo por falta de tiempo, pero era la idea desde el principio.
