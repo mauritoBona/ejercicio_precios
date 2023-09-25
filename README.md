@@ -27,6 +27,18 @@ del artículo que se quiere buscar.
 
 ![](documentation/packages_structure.png)
 
+## Base de Datos
+Se utiliza un H2 que se carga al levantar la aplicación, se puede acceder desde el navegador:
+
+    http://localhost:8080/h2-console
+
+    * Driver: org.h2.Driver
+    * URL: jdbc:h2:mem:testdb
+    * User: sa
+    * Password: 
+
+![h2_config](documentation/h2_config.png)
+
 ## Solución
 La tabla se creó con la PK de PRODUCT_ID - BRAND_ID - START_DATE - END_DATE - PRIORITY dado que se entiende que no se puede cargar un mismo
 producto para la misma marca en donde las fechas sean iguales e igual prioridad, dado que se espera obtener un solo resultado
