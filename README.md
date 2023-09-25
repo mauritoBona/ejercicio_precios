@@ -25,7 +25,7 @@ dado que la tabla BRAND para nuestro caos de uso no es necesario.
 * Usecase: contiene los casos de uso de la aplicación, en este caso es uno solo que es el de ir a buscar el precio activo
 del artículo que se quiere buscar.  
 
-![alt text](documentation/packages_structure.png)
+![](documentation/packages_structure.png)
 
 ## Solución
 La tabla se creó con la PK de PRODUCT_ID - BRAND_ID - START_DATE - END_DATE - PRIORITY dado que se entiende que no se puede cargar un mismo
@@ -42,6 +42,11 @@ Otra posibilidad de esta query si se quiere evitar el limit 1 y el orden, es rea
 
     SELECT * FROM PRICES WHERE PRODUCT_ID = :product_id AND BRAND_ID = :brand_id AND START_DATE <= :date AND END_DATE > :date 
     AND PRIORITY = (SELECT MAX(PRIORITY) FROM PRICES WHERE PRODUCT_ID = :product_id AND BRAND_ID = :brand_id AND START_DATE <= :date AND END_DATE > :date);
+
+![Diagrama](documentation/diagrama.png)
+
+![Diagrama_de_flujo](documentation/diagrama_de_flujo.png)
+
 
 ## Consideraciones asumidas
 * Se creó la tabla BRAND en la base de datos dado que en el ejercicio se aclara que el BRAND_ID es una Foreign Key, entonces para tener la 
@@ -60,6 +65,8 @@ caso de uso que se iba a utilizar y se subieron estos cambios.
 4. Una vez que pasaron todos los tests, validé que la cobertura de tests este en los archivos creados al 100% además de probarlo de forma local. 
 
 ## Mejoras
+    *   Se puede cambiar el formato de json que se retorno, seteando el Price como otro DTO que sea PRICE y adentro el monto y moneda, para identifijar de forma 
+    más clara que estos 2 campos forman el precio.
     *   Analizar el poder agregar una caché para evitar recurrir siempre a la Base de Datos (puede ser Spring-Caché), esto no fue agregado en este momento
     dado que al tener las horas, minutos y segundos se tiene que analizar bien como poder implementarla en esta consulta.
     *   Agregar perfiles a la aplicación para poder tener a su vez una mejor separación en el caso de que se necesite utilizar otro tipo de base de datos,
